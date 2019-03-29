@@ -1,71 +1,17 @@
-#==== Importing libraries
-import numpy as np
-import pandas as pd
-import os
+Hamburg, March 29, 2019
 
-#========= importing data from different files
+Since January 2019 I have completed several online Machine Learning and Deep Learning Courses (Coursera & Udemy). To improve my skilles I practices on a database I downloaded from the UCI website.
 
-#--- parameters
-z = 0
-numrows = -1
-path = '< path to directory with datafiles >'
+The link to the database I used is: https://archive.ics.uci.edu/ml/datasets/EMG+data+for+gestures
+I trained a RandomForestClassifier to make predictions for the testset that was 25% of the original dataset.
 
-#--- calling files and storing data to X and y
-for _ , dirs, _ in os.walk(path):
-    for dirpath in dirs:
-        #print(path+'//'+dirpt)
-        newpath = path+'\\'+dirpath
-        for _ , _ , files in os.walk(newpath):
-            for file in files:
-                filename = (newpath+'\\'+file)
-                dataset = pd.read_csv(filename,
-                      delim_whitespace=True,
-                      skipinitialspace=True)
-                if z == 0:
-                    X = dataset.iloc[1:numrows,1:-1].values
-                    y = dataset.iloc[1:numrows,-1].values
-                    z+=1
-                elif z != 0:
-                    A = dataset.iloc[1:numrows,1:-1].values
-                    b = dataset.iloc[1:numrows,-1].values
-                    
-                    X = np.concatenate((X,A), axis = 0)
-                    y = np.concatenate((y,b), axis = 0)   
-    break            
+Results:
+There are 676565 predictions of 0 which is a fraction of 0.978773 of the total amount.
+There are 58633 predictions of 1 which is a fraction of 0.972436 of the total amount.
+There are 58590 predictions of 2 which is a fraction of 0.985169 of the total amount.
+There are 60286 predictions of 3 which is a fraction of 0.985581 of the total amount.
+There are 60430 predictions of 4 which is a fraction of 0.984266 of the total amount.
+There are 60285 predictions of 5 which is a fraction of 0.987728 of the total amount.
+There are 60706 predictions of 6 which is a fraction of 0.985311 of the total amount.
+There are 3217 predictions of 7 which is a fraction of 0.996901 of the total amount.
 
-
-#==== preparing data for Model
-    
-#--- Splitting the dataset into the Training set and Test set
-from sklearn.cross_validation import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
-
-#--- Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
-
-#==== Preparing and fitting Model
-
-#--- Logitisc Regression
-from sklearn.ensemble import RandomForestClassifier
-classifier = RandomForestClassifier(n_estimators = 8, criterion = 'entropy', random_state = 0)
-classifier.fit(X_train,y_train)
-
-#--- Predicting the Test set results
-y_pred = classifier.predict(X_test)
-
-#=== presenting results
-
-#--- Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, y_pred)
-print(cm)
-
-#--- Calculate ratio 
-for i in range(int(y.max())+1):
-    a = cm[i,i]
-    b = np.sum(cm[:,i])
-    c = a/b
-    print('There are %s predictions of %s which is a fraction of %f of the total amount.' % (a, i, c))
