@@ -30,7 +30,7 @@ Between step 5. and 6. another step can be implemented in which a gridsearch is 
 
 
 
-## Courtesy to:
+## Courtesy of:
 https://github.com/exelban/myo-armband-nn
 https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
 
